@@ -1,0 +1,44 @@
+function RCinvert{
+# data.csv を読み込む
+	$csv = @(Get-Content data.csv )
+
+	function RtClByRow ($col,$row){
+
+	    return $csv[$row].Split(",")[$col]
+
+	}
+
+# 行数-1
+	$rownm1 = 行数-1
+
+# 列数-1
+	$clmnm1 = 列数-1
+
+# コンテナを初期化
+	$content = $null
+
+
+# 列で回す
+	for($c=0; $c -le $clmnm1; $c++){
+
+		for($r=0; $r -le $rownm1; $r++){
+		# 全部の行のcで指定されてる列の値を取って1つの新しい行に詰める
+
+			if($r -eq 0){
+				# 最初の行の値は最初の列の値になるので頭にカンマをつけない
+				$content += RtClByRow $c $r
+			}else{
+				# それ以外は頭にカンマをつける
+				$content += ","+ (RtClByRow $c $r)
+			}
+
+		}
+		# 新しい行がおわるので改行する
+		$content += "`r`n"
+
+	}
+# 全部の列を終えたらコンテナを吐く
+return $content
+}
+# invert.csvに出力する
+RCinvert > invert.csv
